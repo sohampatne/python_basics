@@ -13,7 +13,7 @@ print(wordList.count("Lion"))
 
 
 while chances >= 1:
-    print('hello hellloooo!'  + animalName)
+    # For Cheaters ---> #print('The animals name is'  + animalName)
     userAns = input('Please enter animal name (HINT: ' + hintList[index] + '): ')
     if animalName == userAns:
         print('Hooray! You guessed the animal name!')
