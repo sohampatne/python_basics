@@ -4,17 +4,14 @@ from random import randint
 wordList = ['Giraffe', 'Lion', 'Tiger', 'Monkey', 'Dog']
 hintList = ['Has long neck', 'King of the Jungle', 'National animal', 'Lives in trees', 'Domestic guard animal']
 
-index = randint(0, 4)
+index = randint(0, len(wordList)-1)
 animalName = wordList[index]
 points = 0
 chances = 3
 
-print(wordList.count("Lion"))
-
 
 while chances >= 1:
-    print('hello hellloooo!'  + animalName)
-    userAns = input('Please enter animal name (HINT: ' + hintList[index] + '): ')
+    userAns = input('Please enter animal name (HINT: ' + hintList[index] + ', ' + str(len(animalName)) + ' letter word): ')
     if animalName == userAns:
         print('Hooray! You guessed the animal name!')
         break
