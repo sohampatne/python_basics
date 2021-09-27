@@ -1,4 +1,4 @@
-import random
+# import random
 from random import randint
 
 wordList = ['Giraffe', 'Lion', 'Tiger', 'Monkey', 'Dog']
@@ -9,15 +9,9 @@ animalName = wordList[index]
 points = 0
 chances = 3
 
-
 while chances >= 1:
-<<<<<<< HEAD
     userAns = input('Please enter animal name (HINT: ' + hintList[index] + ', ' + str(len(animalName)) + ' letter word): ')
-=======
-    # For Cheaters ---> #print('The animals name is'  + animalName)
-    userAns = input('Please enter animal name (HINT: ' + hintList[index] + '): ')
->>>>>>> c716c5e584930fb25e35b0c75c5862a11c085e6d
-    if animalName == userAns:
+    if animalName.lower() == userAns.lower() :
         print('Hooray! You guessed the animal name!')
         break
     else:
