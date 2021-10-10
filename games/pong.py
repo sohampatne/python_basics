@@ -1,70 +1,66 @@
 # Step 0 - Imports
 import turtle
 
-score = 0
-execFlag = True
-windowWidth = 800
-windowHeight = 600
-ballWidth = 20
-ballHeight = ballWidth
+# Step 0.1 - Variables
 
-paddleHeight = 100  # 5*20
+exitFlag = False
+screenWidth = 800
+screenHeight = 600
 paddleWidth = 20  # 1*20
-
-turtleSize = 10
-windowMaxX = windowWidth / 2 - turtleSize  # 390
-windowMaxY = windowHeight / 2 - turtleSize  # 270
-windowExcludingPaddleMaxX = windowMaxX - paddleWidth  # 390-20 = 370
-
+paddleHeight = 100  # 5*20
+halfScreen = screenWidth / 2 - paddleWidth / 2
+screenMaxHeight = screenHeight / 2 - 10
+ballCircum = 20
+ballXSpeed = 0.125
+ballYSpeed = 0.125
 paddleSpeed = 50
-ballVerticalSpeed = 0.1  # X
-ballHorizontalSpeed = 0.1  # Y
+leftPlayerScore = 0
+rightPlayerScore = 0
 
-#  Step 1 - Turtle Screen/Window (Object Creation)
-wn = turtle.Screen()
-wn.title('Pong Game')
-wn.bgcolor('black')
-wn.setup(width=windowWidth, height=windowHeight)
-wn.tracer(0)
+# Step 1 - Object Creation
 
-# Step 2 - Left Paddle (Object Creation)
+# Step 1.1 - Screen creation
+window = turtle.Screen()
+window.setup(width=screenWidth, height=screenHeight)
+window.bgcolor('black')
+window.tracer(0)
+
+# Step 1.2 - Paddle Creation
+
+# Step 1.2.1 - Left Paddle Creation
 leftPaddle = turtle.Turtle()
-leftPaddle.speed(0)
-leftPaddle.shape('square')
-leftPaddle.color('#ADFFFE')
-leftPaddle.shapesize(stretch_wid=paddleHeight / 20, stretch_len=paddleWidth / 20)
 leftPaddle.penup()
-leftPaddle.goto(-windowMaxX, 0)
+leftPaddle.shape('square')
+leftPaddle.color('#ADFFF9')
+leftPaddle.speed(0)
+leftPaddle.shapesize(stretch_len=paddleWidth / 20, stretch_wid=paddleHeight / 20)
+leftPaddle.goto(-halfScreen, 0)
 
-# Step 3 - Right Paddle (Object Creation)
+# Step 1.2.2 - Right Paddle Creation
 rightPaddle = turtle.Turtle()
-rightPaddle.speed(0)
-rightPaddle.shape('square')
-rightPaddle.color('#FFD2BA')
-rightPaddle.shapesize(stretch_wid=paddleHeight / 20, stretch_len=paddleWidth / 20)
 rightPaddle.penup()
-rightPaddle.goto(windowMaxX - turtleSize, 0)
+rightPaddle.shape('square')
+rightPaddle.color('#FFADAD')
+rightPaddle.speed(0)
+rightPaddle.shapesize(stretch_len=paddleWidth / 20, stretch_wid=paddleHeight / 20)
+rightPaddle.goto(halfScreen - 10, 0)
 
-# Step 4 - Ball (Object Creation)
+# Step 1.3 - Ball Creation
 ball = turtle.Turtle()
-ball.speed(40)
-ball.shape('circle')
-ball.shapesize(stretch_wid=ballWidth / 20, stretch_len=ballHeight / 20)
-ball.color('#FFFC9E')
 ball.penup()
-# original position 0, 0
+ball.shape('circle')
+ball.color('#FEFF90')
 ball.home()
-
-# ball.goto(0, 0)
-
-# Making variables for the scores
-
-left_player = 0
-right_player = 0
+ball.shapesize(stretch_len=ballCircum / 20, stretch_wid=ballCircum / 20)
+ball.speed(0)
 
 
-# Functions
-# Step 5 - Paddle movement - Change y coordinate position
+# Step 2 - Ball and Paddle movements
+
+# Step 2.1 - Ball movements
+
+# Step 3 - Functions
+
 def left_paddle_up():
     leftPaddle.sety(leftPaddle.ycor() + paddleSpeed)
 
@@ -82,82 +78,67 @@ def right_paddle_down():
 
 
 def exit_program():
-    global execFlag
-    execFlag = False
-    print("Received exit signal")
+    global exitFlag
+    exitFlag = True
+    print('Exiting Program... \n Exited Program \n Thanks for Playing!')
 
 
-# Making the score board
+# Step 3.1 - Listen
 
-# scoreBoard = turtle.Turtle()
-# scoreBoard.speed(0)
-# scoreBoard.color('#CCFFAD')
-# scoreBoard.goto(0, 280)
-# scoreBoard.penup()
-# scoreBoard.hideturtle()
-# scoreBoard.write('Left Player Points:    Nil'
-#                 'Right Player Points:    Nil')
+window.listen()
+window.onkeypress(left_paddle_up, 'w')
+window.onkeypress(left_paddle_down, 's')
+window.onkeypress(right_paddle_up, 'Up')
+window.onkeypress(right_paddle_down, 'Down')
+window.onkeypress(exit_program, 'x')
 
-# Keyboard Binding
-# Step 6 - Add key listener
-wn.listen()
-wn.onkeypress(exit_program, "x")
+# Last and Main step - Main loop
 
-wn.onkeypress(left_paddle_up, "w")
-wn.onkeypress(left_paddle_down, "s")
-wn.onkeypress(right_paddle_up, "Up")
-wn.onkeypress(right_paddle_down, "Down")
+ballYCor = ball.ycor()
+ballXcor = ball.xcor()
 
-print("windowMaxX=" + str(windowMaxX) + ",windowMaxY=" + str(windowMaxY) + ",windowExcludingPaddleMaxX=" + str(
-    windowExcludingPaddleMaxX))
+while not exitFlag:
+    # Step 4 - Collisions
+    # Step 4.1 - Ball Y cor collisions
+    if ballYCor >= screenMaxHeight or ballYCor <= -screenMaxHeight + 8:
+        ballYSpeed *= -1
+        print('Y axis wall touched')
 
-# Step 7 - Main Game Loop (Infinite)
-while True:
-    if execFlag == False:
-        print("Exit the program")
+    if ballXcor >= halfScreen - 18:
+        ballXSpeed *= -1
+        leftPlayerScore += 1
+        print('Right Player\'s wall touched!')
+        print('Left Player Scored!')
+        print('| Right Player | Left Player |' +
+              f'\n|       {rightPlayerScore}      |      {leftPlayerScore}      |')
+
+    if ballXcor <= -halfScreen:
+        ballXSpeed *= -1
+        rightPlayerScore += 1
+        print('Left Player\'s wall touched!')
+        print('Right Player Scored!')
+        print('| Right Player | Left Player |' +
+              f'\n|       {rightPlayerScore}      |      {leftPlayerScore}      |')
+
+    if leftPlayerScore == 5 or rightPlayerScore == 5:
+        if leftPlayerScore > rightPlayerScore:
+            print(f'The Left Player Wins by {leftPlayerScore - rightPlayerScore} point(s)')
+        else:
+            print(f'The Right Player Wins by {rightPlayerScore - leftPlayerScore} point(s)')
         break
-    # Main Step 1 - Perform a TurtleScreen update
-    wn.update()
 
-    # Main Step 2 - Moving the Ball
-    # current position + ballSpeed
-    xPos = ball.xcor() + ballHorizontalSpeed
-    yPos = ball.ycor() + ballVerticalSpeed
-    ball.setx(xPos)
-    ball.sety(yPos)
-    print(str(xPos) + "+" + str(ballHorizontalSpeed) + "," + str(yPos) + "+" + str(ballVerticalSpeed))
+    # Step 4.2 - Paddle and Ball Collisions
+    elif ballXcor >= rightPaddle.xcor() - 20 and \
+            (rightPaddle.ycor() + paddleHeight / 2 >= ballYCor >= rightPaddle.ycor() - paddleHeight / 2):
+        ballXSpeed *= -1
+    elif ballXcor <= leftPaddle.xcor() + 20 and \
+            (leftPaddle.ycor() + paddleHeight / 2 >= ballYCor >= leftPaddle.ycor() - paddleHeight / 2):
+        ballXSpeed *= -1
 
-    # Border Checking
-    if -windowMaxY >= yPos or yPos >= windowMaxY:
-        print("Y => Vertical boundary touched")
-        # ball.sety(windowMaxY)
-        ballVerticalSpeed *= -1
-    if -windowMaxX >= xPos or xPos >= windowMaxX and xPos > 0:
-        print("X => Horizontal boundary touched")
-        # ball.setx(windowMaxX)
-        # left_player += 1
-        ballHorizontalSpeed *= -1
-    #   scoreBoard.clear()
-    #   scoreBoard.write('Left Player Points:    {}'
-    #                    'Right Player Points:    {}'.format(left_player, right_player), align=)
-
-    # Paddle Ball Collisions
-
-# if (ball.xcor() > windowMaxX and ball.xcor() < windowExcludingPaddleMaxX) and (
-#         ball.ycor() < rightPaddle.ycor() + 40 and ball.ycor() > rightPaddle.ycor() - 40):
-#     ball.setx(360)
-#     ballHorizontalSpeed *= -1
-#
-#     if (ball.xcor() < -windowMaxX and ball.xcor() > -windowExcludingPaddleMaxX) and (
-#             ball.ycor() < leftPaddle.ycor() + 40 and ball.ycor() > leftPaddle.ycor() - 40):
-#         ball.setx(-360)
-#         ballHorizontalSpeed *= -1
-
-# if -windowExcludingPaddleMaxX > yPos > windowExcludingPaddleMaxX:
-#    if (rightPaddle.ycor() + paddleWidth >= ball.ycor() > rightPaddle.ycor() - paddleWidth):
-#        ballXSpeed += -1
-#        ballYSpeed += 0.2
-# if -windowExcludingPaddleMaxX > xPos > windowExcludingPaddleMaxX:
-#    if (leftPaddle.ycor() + paddleWidth > ball.ycor() > leftPaddle.ycor() - paddleWidth):
-#        ballXSpeed += -1
-#        ballYSpeed += 0.2
+    ballYCor = ball.ycor() + ballYSpeed
+    ballXcor = ball.xcor() + ballXSpeed
+    ball.sety(ballYCor)
+    ball.setx(ballXcor)
+    # IMPORTANT UPDATE FUNCTION
+    window.update()
+    # print(ball.ycor())
