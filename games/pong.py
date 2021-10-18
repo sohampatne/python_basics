@@ -1,5 +1,6 @@
 # Step 0 - Imports
 import turtle
+import winsound
 
 # Step 0.1 - Variables
 
@@ -11,8 +12,8 @@ paddleHeight = 100  # 5*20
 halfScreen = screenWidth / 2 - paddleWidth / 2
 screenMaxHeight = screenHeight / 2 - 10
 ballCircum = 20
-ballXSpeed = 0.125
-ballYSpeed = 0.125
+ballXSpeed = 0.275
+ballYSpeed = 0.275
 paddleSpeed = 50
 leftPlayerScore = 0
 rightPlayerScore = 0
@@ -24,6 +25,7 @@ window = turtle.Screen()
 window.setup(width=screenWidth, height=screenHeight)
 window.bgcolor('black')
 window.tracer(0)
+window.title('Pong Game')
 
 # Step 1.2 - Paddle Creation
 
@@ -55,10 +57,6 @@ ball.shapesize(stretch_len=ballCircum / 20, stretch_wid=ballCircum / 20)
 ball.speed(0)
 
 
-# Step 2 - Ball and Paddle movements
-
-# Step 2.1 - Ball movements
-
 # Step 3 - Functions
 
 def left_paddle_up():
@@ -83,6 +81,14 @@ def exit_program():
     print('Exiting Program... \n Exited Program \n Thanks for Playing!')
 
 
+def play_sound():
+    winsound.PlaySound('bounce_ball.wav', winsound.SND_ASYNC)
+
+
+def play_oops_sound():
+    winsound.PlaySound('oops.wav', winsound.SND_ASYNC)
+
+
 # Step 3.1 - Listen
 
 window.listen()
@@ -103,6 +109,7 @@ while not exitFlag:
     if ballYCor >= screenMaxHeight or ballYCor <= -screenMaxHeight + 8:
         ballYSpeed *= -1
         print('Y axis wall touched')
+        # play_sound()
 
     if ballXcor >= halfScreen - 18:
         ballXSpeed *= -1
@@ -111,6 +118,7 @@ while not exitFlag:
         print('Left Player Scored!')
         print('| Right Player | Left Player |' +
               f'\n|       {rightPlayerScore}      |      {leftPlayerScore}      |')
+        play_oops_sound()
 
     if ballXcor <= -halfScreen:
         ballXSpeed *= -1
@@ -119,6 +127,7 @@ while not exitFlag:
         print('Right Player Scored!')
         print('| Right Player | Left Player |' +
               f'\n|       {rightPlayerScore}      |      {leftPlayerScore}      |')
+        play_oops_sound()
 
     if leftPlayerScore == 5 or rightPlayerScore == 5:
         if leftPlayerScore > rightPlayerScore:
@@ -131,9 +140,11 @@ while not exitFlag:
     elif ballXcor >= rightPaddle.xcor() - 20 and \
             (rightPaddle.ycor() + paddleHeight / 2 >= ballYCor >= rightPaddle.ycor() - paddleHeight / 2):
         ballXSpeed *= -1
+        play_sound()
     elif ballXcor <= leftPaddle.xcor() + 20 and \
             (leftPaddle.ycor() + paddleHeight / 2 >= ballYCor >= leftPaddle.ycor() - paddleHeight / 2):
         ballXSpeed *= -1
+        play_sound()
 
     ballYCor = ball.ycor() + ballYSpeed
     ballXcor = ball.xcor() + ballXSpeed

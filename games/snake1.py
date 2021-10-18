@@ -9,18 +9,18 @@ class cube(object):
     rows = 20
     w = 500
 
-    def __init__(self, start, dirnx=1, dirny=0, color=(255, 0, 0)):
+    def __init__(self, start, color=(255, 255, 0)):
         self.pos = start
         self.dirnx = 1
         self.dirny = 0
         self.color = color
 
-    def move(self, dirnx, dirny):
-        self.dirnx = dirnx
-        self.dirny = dirny
+    def move(self, x_change, y_change):
+        self.dirnx = x_change
+        self.dirny = y_change
         self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny)
 
-    def draw(self, surface, eyes=False):
+    def draw(self, surface, eyes=True):
         dis = self.w // self.rows
         i = self.pos[0]
         j = self.pos[1]
