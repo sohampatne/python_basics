@@ -24,11 +24,12 @@ class Cube(object):
 
     def draw(self, surface, eyes=False):
         print('inside cube draw')
-        dis = self.w // self.rows # 25
-        x = self.pos[0] # X Position
-        y = self.pos[1] # Y Position
+        dis = self.w // self.rows  # 25
+        x = self.pos[0]  # X Position
+        y = self.pos[1]  # Y Position
 
-        pygame.draw.rect(surface, self.color, pygame.Rect(x * dis + 1, y * dis + 1, dis-2, dis-2)) # 26, 1, 23, 23 # x, y, width, height
+        pygame.draw.rect(surface, self.color, pygame.Rect(
+            x * dis + 1, y * dis + 1, dis-2, dis-2))  # 26, 1, 23, 23 # x, y, width, height
 
         if eyes:
             centre = dis // 2
@@ -38,6 +39,7 @@ class Cube(object):
             pygame.draw.circle(surface, (0, 0, 0), circleMiddle, radius)
             pygame.draw.circle(surface, (0, 0, 0), circleMiddle2, radius)
 #
+
 
 def main():
     # Step 1 - Initializing Pygame
@@ -55,7 +57,6 @@ def main():
 
     snack = Cube(1, 0, (1, 0), snack_color)
 
-
     counter = 0
     while counter <= 5000:
         snack.draw(canvas, True)
@@ -64,5 +65,5 @@ def main():
         pygame.display.flip()
         counter += 1
 
-main()
 
+main()
