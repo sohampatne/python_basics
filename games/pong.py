@@ -35,7 +35,8 @@ leftPaddle.penup()
 leftPaddle.shape('square')
 leftPaddle.color('#ADFFF9')
 leftPaddle.speed(0)
-leftPaddle.shapesize(stretch_len=paddleWidth / 20, stretch_wid=paddleHeight / 20)
+leftPaddle.shapesize(stretch_len=paddleWidth / 20,
+                     stretch_wid=paddleHeight / 20)
 leftPaddle.goto(-halfScreen, 0)
 
 # Step 1.2.2 - Right Paddle Creation
@@ -44,7 +45,8 @@ rightPaddle.penup()
 rightPaddle.shape('square')
 rightPaddle.color('#FFADAD')
 rightPaddle.speed(0)
-rightPaddle.shapesize(stretch_len=paddleWidth / 20, stretch_wid=paddleHeight / 20)
+rightPaddle.shapesize(stretch_len=paddleWidth / 20,
+                      stretch_wid=paddleHeight / 20)
 rightPaddle.goto(halfScreen - 10, 0)
 
 # Step 1.3 - Ball Creation
@@ -111,14 +113,15 @@ while not exitFlag:
         print('Y axis wall touched')
         # play_sound()
 
-    if ballXcor >= halfScreen - 18:
+    if ballXcor >= halfScreen-18:
         ballXSpeed *= -1
         leftPlayerScore += 1
         print('Right Player\'s wall touched!')
-        print('Left Player Scored!')
+        print('\nLeft Player Scored!')
         print('| Right Player | Left Player |' +
               f'\n|       {rightPlayerScore}      |      {leftPlayerScore}      |')
         play_oops_sound()
+        winsound.PlaySound('lps.wav', winsound.SND_ASYNC)
 
     if ballXcor <= -halfScreen:
         ballXSpeed *= -1
@@ -128,16 +131,19 @@ while not exitFlag:
         print('| Right Player | Left Player |' +
               f'\n|       {rightPlayerScore}      |      {leftPlayerScore}      |')
         play_oops_sound()
+        winsound.PlaySound('rps.wav', winsound.SND_ASYNC)
 
     if leftPlayerScore == 5 or rightPlayerScore == 5:
         if leftPlayerScore > rightPlayerScore:
-            print(f'The Left Player Wins by {leftPlayerScore - rightPlayerScore} point(s)')
+            print(
+                f'The Left Player Wins by {leftPlayerScore - rightPlayerScore} point(s)')
         else:
-            print(f'The Right Player Wins by {rightPlayerScore - leftPlayerScore} point(s)')
+            print(
+                f'The Right Player Wins by {rightPlayerScore - leftPlayerScore} point(s)')
         break
 
     # Step 4.2 - Paddle and Ball Collisions
-    elif ballXcor >= rightPaddle.xcor() - 20 and \
+    if ballXcor >= rightPaddle.xcor() - 20 and \
             (rightPaddle.ycor() + paddleHeight / 2 >= ballYCor >= rightPaddle.ycor() - paddleHeight / 2):
         ballXSpeed *= -1
         play_sound()

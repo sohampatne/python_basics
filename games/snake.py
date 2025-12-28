@@ -25,7 +25,8 @@ class cube(object):
         i = self.pos[0]
         j = self.pos[1]
 
-        pygame.draw.rect(surface, self.color, (i * dis + 1, j * dis + 1, dis - 2, dis - 2))
+        pygame.draw.rect(surface, self.color, (i * dis +
+                         1, j * dis + 1, dis - 2, dis - 2))
         if eyes:
             centre = dis // 2
             radius = 3
@@ -193,8 +194,8 @@ def main():
 
         for x in range(len(s.body)):
             if s.body[x].pos in list(map(lambda z: z.pos, s.body[x + 1:])):
-                print('Score: ', 'len(s.body)')
-                message_box('You Lost!', 'Play again')
+                print('Your Score: ', len(s.body))
+                message_box('You Lost The Game', 'Play again')
                 s.reset((10, 10))
                 break
 
